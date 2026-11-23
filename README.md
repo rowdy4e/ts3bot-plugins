@@ -11,6 +11,7 @@ nic se nekopíruje ručně a bot se kvůli tomu nerestartuje.
 !service import badges notify=me,Tisi  … rovnou s nastavením
 !service update                       které služby mají novější verzi
 !service update badges                aktualizuje (nastavení zůstane; když chce víc práv, znovu se zeptá)
+                                      verze = obsah složky pluginu: změna jinde v repu ho neaktualizuje
 !service set badges notify me         změna nastavení
 ```
 
