@@ -2,7 +2,7 @@
 # Dockerfile and runs the image's entrypoint under the same lockdown as any service.
 name: docker-hello
 description: Pozdraví kanál z vlastního Docker image - ukázka pluginu v čemkoli.
-version: 1.0.0
+version: 1.0.1
 run:
   command: dockerhello
 tools: [say_channel]
