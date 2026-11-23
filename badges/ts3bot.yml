@@ -1,0 +1,11 @@
+name: badges
+description: Hlídá TeamSpeak badges - každou novou ohlásí (do kanálu, nebo soukromě vybraným lidem), i s kódem na uplatnění, jakmile je známý.
+version: 1.0.0
+run:
+  cron: "*/15 * * * *"
+network: true
+tools: [say_channel, list_online, message_user]
+settings:
+  notify:
+    type: users
+    description: komu psát soukromě místo do kanálu (jména, "me" = ty) - kdo není online, dostane to, až přijde

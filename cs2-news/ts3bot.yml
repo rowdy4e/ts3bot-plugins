@@ -1,0 +1,7 @@
+name: cs2-news
+description: Nové články o CS2 ze Steamu - pošle je do kanálu.
+version: 1.0.0
+run:
+  cron: "*/30 * * * *"
+network: true
+tools: [say_channel]

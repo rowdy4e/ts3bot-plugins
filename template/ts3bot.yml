@@ -1,0 +1,18 @@
+# Copy this folder, rename it, fill it in. Only 'name' and something to run are required.
+name: my-plugin                     # lowercase, the service's name
+description: What it does, in one sentence.
+version: 0.1.0                      # shown on import and update
+run:
+  cron: "0 9 * * *"                 # when: every day at 9:00 (local time) ...
+  # command: myplugin               # ... and/or on !myplugin ...
+  # daemon: true                    # ... or all the time instead (not with cron/command)
+network: false                      # true = it may go online
+tools: [say_channel]                # the bot tools it may call - nothing else
+# deps: [requests]                  # Python packages (or a requirements.txt next to main.py)
+# main: main.py                     # what runs: main.py / main.sh / main.js by default
+# image: ghcr.io/you/thing:1        # or run a ready image (or put a Dockerfile here: the bot builds it)
+settings:                           # its own settings: SVC_<KEY> in its environment
+  city: which city                  #   set with !service import my-plugin city=Brno
+  # notify:
+  #   type: users                   #   people: stored by UID ("me", admins' names, or a UID)
+  #   description: who to tell
