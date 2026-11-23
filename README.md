@@ -10,7 +10,7 @@ nic se nekopíruje ručně a bot se kvůli tomu nerestartuje.
 !service import badges                nainstaluje plugin z knihovny (ukáže co dělá, zeptá se, spustí ho na zkoušku)
 !service import badges notify=me,Tisi  … rovnou s nastavením
 !service update                       které služby mají novější verzi
-!service update badges                aktualizuje (nastavení zůstane; když chce víc práv, znovu se zeptá)
+!service update badges                aktualizuje (ukáže, co se mění - hlavně víc práv - a zeptá se; nastavení zůstane)
                                       verze = obsah složky pluginu: změna jinde v repu ho neaktualizuje
 !service set badges notify me         změna nastavení
 ```
@@ -23,7 +23,7 @@ Funguje i jakékoli jiné veřejné repo:
 !service import github.com/<účet>/<repo>/<složka>@v1.2   konkrétní verze (tag, větev, commit)
 ```
 
-…nebo odkaz zkopírovaný z prohlížeče (`https://github.com/<účet>/<repo>/tree/main/<složka>`), případně odkaz
+…nebo odkaz zkopírovaný z prohlížeče (`https://github.com/<účet>/<repo>/tree/main/<složka>`), případně https odkaz
 na jeden soubor (gist, pastebin) s hlavičkou `# ts3bot-service`.
 
 ## Kostra pluginu
@@ -50,7 +50,7 @@ run:
   command: mujplugin              # … a/nebo na příkaz !mujplugin …
   daemon: true                    # … nebo pořád (nejde s cron/command)
 network: true                     # smí na internet (jinak ne)
-tools: [say_channel, message_user] # co smí v botovi - nic jiného
+tools: [say_channel, message_user] # co smí v botovi - nic jiného (správu služeb/oprávnění/bota nikdy)
 deps: [requests]                  # balíčky (Python), nebo requirements.txt
 main: main.py                     # co se spouští (výchozí main.py / main.sh / main.js)
 image: ghcr.io/ty/neco:1          # nebo hotový image (nebo Dockerfile vedle)
@@ -71,11 +71,22 @@ settings:                         # vlastní nastavení → proměnná SVC_<KLÍ
 - **Výstup** (`print`) jde lidem: při plánovaném běhu adminům, na příkaz tomu, kdo ho napsal. Když není co
   říct, nic nevypisuj.
 
-## Hranice (sandbox)
+## Bezpečnost
 
-Každý běh je zamčený kontejner: nevidí server ani jeho soubory, nemá porty ven, na internet jen s
-`network: true`, nejvýš 2 minuty a 256 MB na běh (daemon běží pořád). Plugin nikdy nesmí víc než ten,
-kdo ho nainstaloval.
+- **Vždycky se ptá člověk.** Bot ukáže, co plugin dělá, kdy běží, jestli smí na internet a které nástroje
+  smí použít - a nainstaluje ho až po „ano“ od toho, kdo instaluje. AI ho může jen připravit; rozhodne
+  člověk (stránka, kterou AI čte, tak nikdy nic nenainstaluje).
+- **Sandbox.** Každý běh je zamčený kontejner: nevidí server ani jeho soubory, nemá porty ven, na internet
+  jen s `network: true`, nejvýš 2 minuty a 256 MB na běh (daemon běží pořád). Plugin nikdy nesmí víc než
+  ten, kdo ho nainstaloval.
+- **Žádné klíče od bota.** Nástroje na správu služeb, oprávnění, AI a bota samotného plugin dostat nemůže
+  (jinak by si mohl sám rozšířit práva).
+- **Důvěryhodné zdroje.** `Dockerfile` se sestavuje na serveru jen z důvěryhodných zdrojů: z účtu, kterému
+  patří tahle knihovna (a z těch, které operátor přidá do `PluginsTrusted`). Z ostatních jde nainstalovat
+  jen skript nebo hotový image - a bot u nich upozorní, že nejsou z důvěryhodného zdroje.
+- **Aktualizace na zkoušku.** Nová verze se připraví vedle staré; když neprojde zkušebním během, zůstane
+  stará. Vypnutá služba zůstane vypnutá. Nastavení a data převezme jen nová verze **téhož** pluginu -
+  jiný plugin se stejným jménem začíná načisto.
 
 ## Pluginy
 
